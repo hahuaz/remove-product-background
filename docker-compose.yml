@@ -1,0 +1,31 @@
+version: "3.8"
+name: shopify-app
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  express:
+    stdin_open: true
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres?schema=public # {service}://{username}:{password}@{host}:{port}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: express-app
+    depends_on:
+      - postgres
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/backend # enable reloading
+
+volumes:
+  postgres-data:
