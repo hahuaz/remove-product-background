@@ -2,18 +2,21 @@ import express, { Application } from "express";
 
 // import redis from "./config/redis";
 
-import {
-  organizationRouter,
-  personRouter,
-  testRouter,
-  skillRouter,
-} from "./routes";
+import { testRouter } from "./routes";
 
 const app: Application = express();
-const EXPRESS_PORT = 3000;
+const EXPRESS_PORT = 3001;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Enable CORS
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 app.get("/", async (_req, res) => {
   res.send("Hello World!");

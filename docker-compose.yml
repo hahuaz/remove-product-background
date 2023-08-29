@@ -17,7 +17,7 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres?schema=public # {service}://{username}:{password}@{host}:{port}
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: express-app
     depends_on:
@@ -25,7 +25,7 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - ./backend:/backend # enable reloading
+      - ./backend:/app # enable reloading
 
 volumes:
   postgres-data:

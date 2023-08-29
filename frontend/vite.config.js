@@ -1,15 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import https from "https";
 import react from "@vitejs/plugin-react";
-
-const proxyOptions = {
-  target: `http://127.0.0.1:${process.env.BACKEND_PORT}`,
-  changeOrigin: false,
-  secure: true,
-  ws: false,
-};
 
 export default defineConfig(({ command, mode }) => {
   console.log("command:", command);
@@ -43,10 +35,15 @@ export default defineConfig(({ command, mode }) => {
         port: 64999,
         clientPort: 64999,
       },
-      // proxy: {
-      //   "^/(\\?.*)?$": proxyOptions,
-      //   "^/api(/|(\\?.*)?$)": proxyOptions,
-      // },
+      proxy: {
+        // "^/(\\?.*)?$": proxyOptions,
+        "^/api(/|(\\?.*)?$)": {
+          target: `http://127.0.0.1:3001`,
+          changeOrigin: false,
+          secure: true,
+          ws: false,
+        },
+      },
     },
   };
 });

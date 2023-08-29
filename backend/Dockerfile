@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /backend
+WORKDIR /app
 
 COPY package*.json ./
 COPY prisma ./prisma/
