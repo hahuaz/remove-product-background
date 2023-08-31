@@ -35,11 +35,10 @@ export default defineConfig(({ command, mode }) => {
       },
       proxy: {
         // "^/(\\?.*)?$": proxyOptions,
-        "^/api(/|(\\?.*)?$)": {
-          target: `http://127.0.0.1:3001`,
+        "^/api": {
+          target: `http://backend:3001`, // connect to the backend container
           changeOrigin: true,
           secure: false,
-          ws: false,
         },
       },
     },
