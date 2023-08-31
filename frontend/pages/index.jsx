@@ -29,11 +29,11 @@ export default function HomePage() {
   }, []);
 
   return (
-    <Page narrowWidth>
+    <Page fullWidth>
       <TitleBar title={"hello world!"} primaryAction={null} />
       <Layout>
         <Layout.Section>
-          <p>hi3</p>
+          <p>ssa2234572test</p>
         </Layout.Section>
         <Layout.Section>
           <p>hello!</p>

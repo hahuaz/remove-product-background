@@ -19,13 +19,24 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: express-app
+    container_name: backend
     depends_on:
       - postgres
     ports:
       - "3001:3001"
     volumes:
-      - ./backend:/app # enable reloading
+      - ./backend:/backend
+  vite:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+      - "64999:64999"
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules/ # do not share node_modules between host and container
 
 volumes:
   postgres-data:

@@ -27,14 +27,20 @@ export default defineConfig(({ command, mode }) => {
       preserveSymlinks: true,
     },
     server: {
-      host: "localhost",
+      host: true, // it needs to be set to true for docker
       port: 3000,
-      hmr: {
-        protocol: "ws",
-        host: "localhost",
-        port: 64999,
-        clientPort: 64999,
+      // add the next lines if you're using windows and hot reload doesn't work in docker
+      // https://dev.to/ysmnikhil/how-to-build-with-react-or-vue-with-vite-and-docker-1a3l
+      watch: {
+        usePolling: true,
       },
+      // traditional hmr if you're not using docker
+      // hmr: {
+      //   protocol: "ws",
+      //   host: "127.0.0.1",
+      //   port: 64999,
+      //   clientPort: 64999,
+      // },
       proxy: {
         // "^/(\\?.*)?$": proxyOptions,
         "^/api(/|(\\?.*)?$)": {
