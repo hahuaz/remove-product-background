@@ -29,18 +29,10 @@ export default defineConfig(({ command, mode }) => {
     server: {
       host: "0.0.0.0", // listen on all IPs to allow host to access the dev server
       port: 3000,
-      // add the next lines if you're using windows and hot reload doesn't work in docker
-      // https://dev.to/ysmnikhil/how-to-build-with-react-or-vue-with-vite-and-docker-1a3l
-      watch: {
-        usePolling: true,
+      hmr: {
+        protocol: "ws",
+        port: 64999,
       },
-      // traditional hmr if you're not using docker
-      // hmr: {
-      //   protocol: "ws",
-      //   host: "127.0.0.1",
-      //   port: 64999,
-      //   clientPort: 64999,
-      // },
       proxy: {
         // "^/(\\?.*)?$": proxyOptions,
         "^/api(/|(\\?.*)?$)": {
