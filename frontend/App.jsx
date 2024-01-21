@@ -1,7 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NavigationMenu } from "@shopify/app-bridge-react";
-import Routes from "./Routes";
 
 console.log(import.meta.env.VITE_SHOPIFY_API_KEY);
 
@@ -9,6 +8,7 @@ import {
   AppBridgeProvider,
   QueryProvider,
   PolarisProvider,
+  Routes,
 } from "./components";
 
 export default function App() {
