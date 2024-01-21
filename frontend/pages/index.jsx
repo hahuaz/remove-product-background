@@ -12,7 +12,7 @@ import { TitleBar } from "@shopify/app-bridge-react";
 
 import { trophyImage } from "../assets";
 
-import { ProductsCard } from "../components";
+// import { ProductsCard } from "../components";
 import { useEffect } from "react";
 
 import { useTranslation } from "react-i18next";
