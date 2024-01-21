@@ -2,8 +2,6 @@ import { BrowserRouter } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NavigationMenu } from "@shopify/app-bridge-react";
 
-console.log(import.meta.env.VITE_SHOPIFY_API_KEY);
-
 import {
   AppBridgeProvider,
   QueryProvider,
@@ -12,9 +10,12 @@ import {
 } from "@/components";
 
 export default function App() {
-  // Any .tsx or .jsx files in /pages will become a route
-  const pages = import.meta.globEager("./pages/**/!(*.test.[jt]sx)*.([jt]sx)");
   const { t } = useTranslation();
+
+  // Any .tsx or .jsx files in /pages will become a route
+  const pages = import.meta.glob("./pages/**/!(*.test.[jt]sx)*.([jt]sx)", {
+    eager: true,
+  });
 
   return (
     <PolarisProvider>
