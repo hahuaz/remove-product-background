@@ -25,7 +25,7 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - ./backend:/backend
+      - ./backend:/backend # sync files between host and container. Enable hot reloading
   vite:
     build:
       context: ./frontend
@@ -35,7 +35,7 @@ services:
       - "3000:3000"
       - "64999:64999"
     volumes:
-      - ./frontend:/frontend
+      - ./frontend:/frontend # sync files between host and container. Enable hot reloading
       - /frontend/node_modules/ # do not share node_modules between host and container
 
 volumes:

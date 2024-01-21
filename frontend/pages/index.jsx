@@ -15,10 +15,13 @@ import { trophyImage } from "../assets";
 import { ProductsCard } from "../components";
 import { useEffect } from "react";
 
+import { useTranslation } from "react-i18next";
+
 export default function HomePage() {
+  const { t } = useTranslation();
   useEffect(() => {
     async function getData() {
-      const response = await fetch("/api");
+      const response = await fetch("/api/test");
       const data = await response.json();
       console.log(data);
     }
@@ -32,9 +35,7 @@ export default function HomePage() {
     <Page fullWidth>
       <TitleBar title={"hello world!"} primaryAction={null} />
       <Layout>
-        <Layout.Section>
-          <p>ssa2234572test</p>
-        </Layout.Section>
+        <Layout.Section>{t("NotFound.heading")}</Layout.Section>
         <Layout.Section>
           <p>hello!</p>
         </Layout.Section>

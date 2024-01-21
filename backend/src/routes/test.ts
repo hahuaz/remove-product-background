@@ -6,7 +6,7 @@ import prisma from "../config/prisma";
 const router = express.Router();
 
 // get all services
-router.get("/", async (req, res) => {
+router.get("/test", async (req, res) => {
   console.log("server hit");
   res.json({ message: "success" });
 });
