@@ -6,6 +6,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig(({ command, mode }) => {
   console.log("command:", command);
   console.log("mode:", mode);
+  console.log("meta.url", import.meta.url);
   process.env = {
     ...process.env,
     ...loadEnv(mode, process.cwd(), ""),
@@ -14,9 +15,14 @@ export default defineConfig(({ command, mode }) => {
   if (!process.env.SHOPIFY_API_KEY) {
     throw new Error("SHOPIFY_API_KEY is not defined");
   }
-  console.log("root", dirname(fileURLToPath(import.meta.url)));
+  const root = dirname(fileURLToPath(import.meta.url));
   return {
-    root: dirname(fileURLToPath(import.meta.url)),
+    root,
+    resolve: {
+      alias: {
+        "@": root,
+      },
+    },
     plugins: [react()],
     define: {
       "process.env.SHOPIFY_API_KEY": JSON.stringify(
