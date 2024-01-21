@@ -14,7 +14,7 @@ export default defineConfig(({ command, mode }) => {
   if (!process.env.SHOPIFY_API_KEY) {
     throw new Error("SHOPIFY_API_KEY is not defined");
   }
-
+  console.log("root", dirname(fileURLToPath(import.meta.url)));
   return {
     root: dirname(fileURLToPath(import.meta.url)),
     plugins: [react()],
@@ -23,9 +23,7 @@ export default defineConfig(({ command, mode }) => {
         process.env.SHOPIFY_API_KEY
       ),
     },
-    resolve: {
-      preserveSymlinks: true,
-    },
+
     server: {
       host: "0.0.0.0", // listen on all IPs to allow host to access the dev server
       port: 3000,
