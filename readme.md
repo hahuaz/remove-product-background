@@ -15,4 +15,5 @@ docker-compose up
 
 # TODO:
 - shopify app setup > url needs to be set to http://localhost:3000. http://127.0.0.1:3000 will not work since shopify resolves it to its own url
-- 
+- Backend port should be exposed for shopify to call ouath callback.
+./cloudflared.exe tunnel --url http://localhost:3001
