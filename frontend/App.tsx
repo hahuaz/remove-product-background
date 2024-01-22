@@ -2,7 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NavigationMenu } from "@shopify/app-bridge-react";
 
-// TODO tailwind may reset style of polaris. Need to check.
+// TODO tailwind may reset style of polaris if it's imported after polaris. Need to investigate.
 import "@/assets/styles/tailwind.css";
 
 import {
@@ -20,6 +20,7 @@ export default function App() {
     eager: true,
   });
 
+  // TODO: app context provider
   return (
     <PolarisProvider>
       <BrowserRouter>
@@ -27,6 +28,10 @@ export default function App() {
           <QueryProvider>
             <NavigationMenu
               navigationLinks={[
+                {
+                  label: t("NavigationMenu.home"),
+                  destination: "/",
+                },
                 {
                   label: t("NavigationMenu.pageName"),
                   destination: "/pagename",
