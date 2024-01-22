@@ -2,6 +2,9 @@ import { BrowserRouter } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NavigationMenu } from "@shopify/app-bridge-react";
 
+// TODO tailwind may reset style of polaris. Need to check.
+import "@/assets/styles/tailwind.css";
+
 import {
   AppBridgeProvider,
   QueryProvider,

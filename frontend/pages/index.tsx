@@ -22,7 +22,7 @@ export default function HomePage() {
       <TitleBar title={"hello world!"} primaryAction={undefined} />
       <Layout>
         <Layout.Section>
-          <p>{t("HomePage.heading")}</p>
+          <p className="bg-red-500">{t("HomePage.heading")}</p>
         </Layout.Section>
       </Layout>
     </Page>
