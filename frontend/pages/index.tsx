@@ -1,20 +1,6 @@
-import {
-  Card,
-  Page,
-  Layout,
-  TextContainer,
-  Image,
-  Stack,
-  Link,
-  Text,
-} from "@shopify/polaris";
+import { Page, Layout } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
-
-import { trophyImage } from "../assets";
-
-// import { ProductsCard } from "../components";
 import { useEffect } from "react";
-
 import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
@@ -33,11 +19,10 @@ export default function HomePage() {
 
   return (
     <Page fullWidth>
-      <TitleBar title={"hello world!"} primaryAction={null} />
+      <TitleBar title={"hello world!"} primaryAction={undefined} />
       <Layout>
-        <Layout.Section>{t("NotFound.heading")}</Layout.Section>
         <Layout.Section>
-          <p>hello!</p>
+          <p>{t("HomePage.heading")}</p>
         </Layout.Section>
       </Layout>
     </Page>

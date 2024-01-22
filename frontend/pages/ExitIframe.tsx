@@ -13,6 +13,10 @@ export default function ExitIframe() {
     if (!!app && !!search) {
       const params = new URLSearchParams(search);
       const redirectUri = params.get("redirectUri");
+      if (!redirectUri) {
+        return console.warn("No redirectUri found in query params");
+      }
+
       const url = new URL(decodeURIComponent(redirectUri));
 
       if (
