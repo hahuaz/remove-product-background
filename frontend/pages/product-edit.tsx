@@ -17,7 +17,7 @@ import { useSearchParams } from "react-router-dom";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ViewMinor, EditMinor } from "@shopify/polaris-icons";
+import { ViewIcon, EditIcon } from "@shopify/polaris-icons";
 import { SketchPicker, RGBColor } from "react-color";
 import { authenticatedFetch } from "@shopify/app-bridge/utilities";
 
@@ -182,7 +182,7 @@ export default function other() {
                         {
                           title: "Bulk actions",
                           items: [
-                            { content: "Edit", icon: EditMinor },
+                            { content: "Edit", icon: EditIcon },
                             { content: "Delete", icon: DeleteMinor },
                           ],
                         },
@@ -215,7 +215,7 @@ export default function other() {
                       </span>
                     </p>
                     <Button
-                      icon={ViewMinor}
+                      icon={ViewIcon}
                       size="slim"
                       onClick={() =>
                         previewBG({
@@ -272,7 +272,7 @@ export default function other() {
                       </span>
                     </p>
                     <div>
-                      <Button icon={EditMinor} destructive size="slim">
+                      <Button icon={EditIcon} destructive size="slim">
                         Remove
                       </Button>
                     </div>
