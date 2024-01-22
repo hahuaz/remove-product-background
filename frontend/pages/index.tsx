@@ -3,6 +3,8 @@ import { TitleBar } from "@shopify/app-bridge-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ProductTable } from "@/components";
+
 export default function HomePage() {
   const { t } = useTranslation();
   useEffect(() => {
@@ -19,10 +21,10 @@ export default function HomePage() {
 
   return (
     <Page fullWidth>
-      <TitleBar title={"hello world!"} primaryAction={undefined} />
+      <TitleBar title={t("homePage.title")} primaryAction={undefined} />
       <Layout>
         <Layout.Section>
-          <p className="bg-red-500">{t("HomePage.heading")}</p>
+          <ProductTable></ProductTable>
         </Layout.Section>
       </Layout>
     </Page>
