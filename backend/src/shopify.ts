@@ -4,6 +4,19 @@ import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-p
 
 import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
 
+// TODO use shopify-api instead of shopify-app-express
+// import { shopifyApi } from "@shopify/shopify-api";
+// const shopify =  shopifyApi({
+//   apiVersion: LATEST_API_VERSION,
+//   restResources,
+//   billing: undefined, // or replace with billingConfig above to enable example billing
+//   apiKey: SHOPIFY_APP_ID,
+//   apiSecretKey: SHOPIFY_APP_SECRET,
+//   scopes: ["read_products", "write_products"],
+//   hostName: HOST_NAME,
+//   isEmbeddedApp: true,
+// });
+
 if (process.env.DATABASE_URL == undefined) {
   throw new Error("Missing DATABASE_URL");
 }
@@ -51,5 +64,6 @@ const shopify = shopifyApp({
     process.env.DATABASE_URL
   ),
 });
+shopify.api.utils;
 
 export default shopify;
