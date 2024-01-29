@@ -1,9 +1,12 @@
 import { BillingInterval, LATEST_API_VERSION } from "@shopify/shopify-api";
 import { shopifyApp } from "@shopify/shopify-app-express";
-import { SQLiteSessionStorage } from "@shopify/shopify-app-session-storage-sqlite";
+import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
+
 import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
 
-const DB_PATH = `${process.cwd()}/database.sqlite`;
+if (process.env.DATABASE_URL == undefined) {
+  throw new Error("Missing DATABASE_URL");
+}
 
 const { SHOPIFY_APP_ID, SHOPIFY_APP_SECRET, HOST_NAME } = process.env;
 if (!SHOPIFY_APP_ID || !SHOPIFY_APP_SECRET || !HOST_NAME) {
@@ -25,6 +28,7 @@ const billingConfig = {
 
 const shopify = shopifyApp({
   api: {
+    // WARNING: [shopify-api/WARNING] Loading REST resources for API version 2023-04, which doesn't match the default 2023-07
     apiVersion: LATEST_API_VERSION,
     restResources,
     billing: undefined, // or replace with billingConfig above to enable example billing
@@ -41,8 +45,11 @@ const shopify = shopifyApp({
   webhooks: {
     path: "/api/webhooks",
   },
-  // This should be replaced with your preferred storage strategy
-  sessionStorage: new SQLiteSessionStorage(DB_PATH),
+  // all the required functions are as following https://github.com/Shopify/shopify-app-js/blob/main/packages/shopify-app-session-storage/implementing-session-storage.md
+  sessionStorage: new PostgreSQLSessionStorage(
+    // 'postgres://username:password@host/database',
+    process.env.DATABASE_URL
+  ),
 });
 
 export default shopify;
