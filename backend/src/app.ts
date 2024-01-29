@@ -49,6 +49,10 @@ app.use(express.json());
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
+// TODO shopify.ensureInstalledOnShop() redirects unistalled shops to shopify app install page. it can be customized if check only made to our db and not shopify
+// [shopify-app/INFO] Running ensureInstalledOnShop
+// 2024-01-29 22:48:53 [shopify-app/INFO] Found a session, but it is not valid. Redirecting to auth | {shop: dev-hahuaz.myshopify.com}
+// 2024-01-29 22:48:53 [shopify-api/INFO] Beginning OAuth | {shop: dev-hahuaz.myshopify.com, isOnline: false, callbackPath: /api/auth/callback}
 app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
   return res.status(200).send({
     message:
