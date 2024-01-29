@@ -14,8 +14,8 @@ services:
       - postgres-data:/var/lib/postgresql/data
   express:
     stdin_open: true
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres?schema=public # {service}://{username}:{password}@{host}:{port}
+    env_file:
+      - ./backend/.env
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -26,7 +26,10 @@ services:
       - "3001:3001"
     volumes:
       - ./backend:/backend # sync files between host and container. Enable hot reloading
+      - /backend/node_modules/ # do not share node_modules between host and container
   vite:
+    env_file:
+      - ./frontend/.env
     build:
       context: ./frontend
       dockerfile: Dockerfile

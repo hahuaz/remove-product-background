@@ -22,6 +22,11 @@ const STATIC_PATH =
 const app: Application = express();
 const EXPRESS_PORT = 3001;
 
+app.use(async (req, res, next) => {
+  console.log(req.method, req.url, req.headers, JSON.stringify(req.body || {}));
+  next();
+});
+
 // Set up Shopify authentication and webhook handling
 app.get(shopify.config.auth.path, shopify.auth.begin());
 app.get(
@@ -34,6 +39,7 @@ app.get(
 //   shopify.processWebhooks({ webhookHandlers: PrivacyWebhookHandlers })
 // );
 
+// protect all routes except /api/auth, /api/auth/callback and webhooks. This makes sure all requests are originating from Shopify admin panel
 app.use("/api/*", shopify.validateAuthenticatedSession());
 
 // TODO encoding added by me may cause issues
@@ -59,10 +65,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-app.use(async (req, res, next) => {
-  console.log(req.method, req.url, req.headers, JSON.stringify(req.body || {}));
-  next();
-});
+
 app.get("/", async (_req, res) => {
   res.send("Hello World!");
 });
