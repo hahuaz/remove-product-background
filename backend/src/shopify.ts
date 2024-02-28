@@ -1,8 +1,7 @@
 import { BillingInterval, LATEST_API_VERSION } from "@shopify/shopify-api";
+import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
 import { shopifyApp } from "@shopify/shopify-app-express";
 import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
-
-import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
 
 // TODO use shopify-api instead of shopify-app-express
 // import { shopifyApi } from "@shopify/shopify-api";

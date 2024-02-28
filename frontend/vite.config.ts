@@ -17,8 +17,8 @@ export default defineConfig(({ command, mode }) => {
     ...process.env,
     ...loadEnv(mode, parentDir, ""),
   };
-  if (!process.env.SHOPIFY_API_KEY) {
-    throw new Error("SHOPIFY_API_KEY is not defined");
+  if (!process.env.SHOPIFY_APP_ID) {
+    throw new Error("SHOPIFY_APP_ID is not defined");
   }
 
   return {
@@ -31,9 +31,7 @@ export default defineConfig(({ command, mode }) => {
     plugins: [react()],
     define: {
       // expose env variables to the client
-      "process.env.SHOPIFY_API_KEY": JSON.stringify(
-        process.env.SHOPIFY_API_KEY
-      ),
+      "process.env.SHOPIFY_APP_ID": JSON.stringify(process.env.SHOPIFY_APP_ID),
     },
   };
 });

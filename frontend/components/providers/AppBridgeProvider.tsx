@@ -50,18 +50,18 @@ export function AppBridgeProvider({ children }: { children: React.ReactNode }) {
 
     return {
       host,
-      apiKey: process.env.SHOPIFY_API_KEY!,
+      apiKey: process.env.SHOPIFY_APP_ID!,
       forceRedirect: true,
     };
   });
 
-  if (!process.env.SHOPIFY_API_KEY || !appBridgeConfig.host) {
-    const bannerProps = !process.env.SHOPIFY_API_KEY
+  if (!process.env.SHOPIFY_APP_ID || !appBridgeConfig.host) {
+    const bannerProps = !process.env.SHOPIFY_APP_ID
       ? {
           title: "Missing Shopify API Key",
           children: (
             <>
-              Your app is running without the SHOPIFY_API_KEY environment
+              Your app is running without the SHOPIFY_APP_ID environment
               variable. Please ensure that it is set when running or building
               your React app.
             </>
