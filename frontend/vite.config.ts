@@ -7,27 +7,30 @@ export default defineConfig(({ command, mode }) => {
   console.log("command:", command);
   console.log("mode:", mode);
   console.log("meta.url", import.meta.url);
-  // TODO while building for production, you still need frontend/.env file. reduce it to only one .env file
+
+  const filePath = fileURLToPath(import.meta.url);
+  const currentDir = dirname(filePath);
+  const parentDir = dirname(currentDir);
+
+  // go up one level to work with .env file from root
   process.env = {
     ...process.env,
-    ...loadEnv(mode, process.cwd(), ""),
+    ...loadEnv(mode, parentDir, ""),
   };
-
-  console.log("SHOPIFY_API_KEY", process.env.SHOPIFY_API_KEY);
   if (!process.env.SHOPIFY_API_KEY) {
     throw new Error("SHOPIFY_API_KEY is not defined");
   }
-  // TODO what is difference createServer root and defineConfig root
-  const root = dirname(fileURLToPath(import.meta.url));
+
   return {
-    root,
+    root: currentDir,
     resolve: {
       alias: {
-        "@": root,
+        "@": currentDir,
       },
     },
     plugins: [react()],
     define: {
+      // expose env variables to the client
       "process.env.SHOPIFY_API_KEY": JSON.stringify(
         process.env.SHOPIFY_API_KEY
       ),

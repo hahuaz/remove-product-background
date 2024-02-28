@@ -5,7 +5,7 @@
 ```bash	
 docker-compose build --no-cache
 ```
-Building without cache is specially important when you made changes to dependencies for your app. Otherwise, docker will use the cached version and you may end up with errors.
+The --no-cache flag is important when you made changes to dependencies for your app. Otherwise, docker will use the cached version and you may end up with errors.
 
 ### 2. Start containers
 
@@ -13,7 +13,7 @@ Building without cache is specially important when you made changes to dependenc
 docker-compose up --force-recreate
 ```
 
---force-recreate is important flag to use when you want to recreate containers from scratch. Otherwise, docker will use the cached version and you may end up with errors due to stalled dependencies.
+The --force-recreate is important flag to use when you want to recreate containers from scratch. Otherwise, docker will use the cached version and you may end up with errors due to stalled dependencies.
 
 ## how to migrate db that is running in docker container
 First of all, you need to create migration files in your host machine (not in docker container) to persist them.
