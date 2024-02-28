@@ -1,15 +1,17 @@
-import {validateAuthenticatedSession} from './validate-authenticated-session';
+import { addCorsHeaders } from "./cors-headers";
+import { cspHeaders } from "./csp-headers";
 import {
   deleteAppInstallationHandler,
   ensureInstalled,
-} from './ensure-installed-on-shop';
-import {cspHeaders} from './csp-headers';
-import {redirectToShopifyOrAppRoot} from './redirect-to-shopify-or-app-root';
+} from "./ensure-installed-on-shop";
+import { redirectToShopifyOrAppRoot } from "./redirect-to-shopify-or-app-root";
+import { validateAuthenticatedSession } from "./validate-authenticated-session";
 
 export {
-  validateAuthenticatedSession,
-  deleteAppInstallationHandler,
+  addCorsHeaders,
   cspHeaders,
+  deleteAppInstallationHandler,
   ensureInstalled,
   redirectToShopifyOrAppRoot,
+  validateAuthenticatedSession,
 };

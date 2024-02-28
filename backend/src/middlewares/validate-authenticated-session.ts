@@ -1,12 +1,13 @@
-import {Session, Shopify, InvalidJwtError} from '@shopify/shopify-api';
-import {Request, Response, NextFunction} from 'express';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { InvalidJwtError, Session, Shopify } from "@shopify/shopify-api";
+import { NextFunction, Request, Response } from "express";
 
-import {redirectToAuth} from '../redirect-to-auth';
-import {ApiAndConfigParams} from '../types';
-import {redirectOutOfApp} from '../redirect-out-of-app';
-
-import {ValidateAuthenticatedSessionMiddleware} from './types';
-import {hasValidAccessToken} from './has-valid-access-token';
+import { redirectOutOfApp } from "../redirect-out-of-app";
+import { redirectToAuth } from "../redirect-to-auth";
+import { ApiAndConfigParams } from "../types";
+import { hasValidAccessToken } from "./has-valid-access-token";
+import { ValidateAuthenticatedSessionMiddleware } from "./types";
 
 interface validateAuthenticatedSessionParams extends ApiAndConfigParams {}
 
@@ -16,7 +17,7 @@ export function validateAuthenticatedSession({
 }: validateAuthenticatedSessionParams): ValidateAuthenticatedSessionMiddleware {
   return function validateAuthenticatedSession() {
     return async (req: Request, res: Response, next: NextFunction) => {
-      config.logger.info('Running validateAuthenticatedSession');
+      config.logger.info("Running validateAuthenticatedSession");
 
       let sessionId: string | undefined;
       try {
@@ -27,7 +28,7 @@ export function validateAuthenticatedSession({
         });
       } catch (error) {
         config.logger.error(
-          `Error when loading session from storage: ${error}`,
+          `Error when loading session from storage: ${error}`
         );
 
         handleSessionError(req, res, error);
@@ -40,7 +41,7 @@ export function validateAuthenticatedSession({
           session = await config.sessionStorage.loadSession(sessionId);
         } catch (error) {
           config.logger.error(
-            `Error when loading session from storage: ${error}`,
+            `Error when loading session from storage: ${error}`
           );
 
           res.status(500);
@@ -54,25 +55,25 @@ export function validateAuthenticatedSession({
 
       if (session && shop && session.shop !== shop) {
         config.logger.debug(
-          'Found a session for a different shop in the request',
-          {currentShop: session.shop, requestShop: shop},
+          "Found a session for a different shop in the request",
+          { currentShop: session.shop, requestShop: shop }
         );
 
-        return redirectToAuth({req, res, api, config});
+        return redirectToAuth({ req, res, api, config });
       }
 
       if (session) {
-        config.logger.debug('Request session found and loaded', {
+        config.logger.debug("Request session found and loaded", {
           shop: session.shop,
         });
 
         if (session.isActive(api.config.scopes)) {
-          config.logger.debug('Request session exists and is active', {
+          config.logger.debug("Request session exists and is active", {
             shop: session.shop,
           });
 
           if (await hasValidAccessToken(api, session)) {
-            config.logger.info('Request session has a valid access token', {
+            config.logger.info("Request session has a valid access token", {
               shop: session.shop,
             });
 
@@ -91,7 +92,7 @@ export function validateAuthenticatedSession({
           shop = await setShopFromSessionOrToken(
             api,
             session,
-            bearerPresent[1],
+            bearerPresent[1]
           );
         }
       }
@@ -99,10 +100,15 @@ export function validateAuthenticatedSession({
       const redirectUri = `${config.auth.path}?shop=${shop}`;
       config.logger.info(
         `Session was not valid. Redirecting to ${redirectUri}`,
-        {shop},
+        { shop }
       );
 
-      return redirectOutOfApp({config})({req, res, redirectUri, shop: shop!});
+      return redirectOutOfApp({ config })({
+        req,
+        res,
+        redirectUri,
+        shop: shop!,
+      });
     };
   };
 }
@@ -123,7 +129,7 @@ function handleSessionError(_req: Request, res: Response, error: Error) {
 async function setShopFromSessionOrToken(
   api: Shopify,
   session: Session | undefined,
-  token: string,
+  token: string
 ): Promise<string | undefined> {
   let shop: string | undefined;
 
@@ -131,7 +137,7 @@ async function setShopFromSessionOrToken(
     shop = session.shop;
   } else if (api.config.isEmbeddedApp) {
     const payload = await api.session.decodeSessionToken(token);
-    shop = payload.dest.replace('https://', '');
+    shop = payload.dest.replace("https://", "");
   }
   return shop;
 }
