@@ -23,7 +23,7 @@ export default function HomePage() {
     <Page fullWidth>
       <TitleBar title={"ses"} primaryAction={undefined} />
       <Layout>
-        <p>hello 219223</p>
+        <p>hello 219225</p>
         {/* <Layout.Section>
           <ProductTable></ProductTable>
         </Layout.Section> */}

@@ -5,11 +5,11 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import dotenv from "dotenv";
 dotenv.config();
-import { createServer as createViteServer } from "vite";
 import shopify from "./shopify";
 // import PrivacyWebhookHandlers from "./privacy";
 // import redis from "./config/redis";
 import { productRouter, removeBackgroundRouter } from "./routes";
+import ViteExpress from "vite-express";
 
 const isDev = process.env.NODE_ENV === "production" ? false : true;
 
@@ -18,7 +18,7 @@ const STATIC_PATH =
     ? `${process.cwd()}/frontend/dist`
     : `${process.cwd()}/frontend/`;
 
-const app: Application = express();
+const app = express();
 const EXPRESS_PORT = 3001;
 
 app.use(async (req, res, next) => {
@@ -93,32 +93,17 @@ const createServer = async () => {
   // await rabbitmqChannel.assertQueue("validate-name");
 
   if (isDev) {
-    const vite = await createViteServer({
-      root: join(__dirname, "../../frontend"),
-      server: {
-        middlewareMode: true,
-        hmr: {
-          // without docker you only need following config. client will send ping request to  ws://localhost:6666/
-          // protocol: "ws",
-          // host: "localhost",
-          // port: 6666,
-          // clientPort: 6666,
-          protocol: "ws",
-          host: "0.0.0.0",
-          port: 6666,
-          clientPort: 6666,
-        },
-      },
+    ViteExpress.config({
+      viteConfigFile: join(__dirname, "../../frontend/vite.config.ts"),
+      mode: "development",
     });
-    app.use(vite.middlewares);
+    ViteExpress.listen(app, EXPRESS_PORT, () =>
+      console.log(
+        `You can connect to express app on http://localhost:${EXPRESS_PORT}`
+      )
+    );
   } else {
     // TODO serve build files on production
   }
-
-  app.listen(EXPRESS_PORT, () => {
-    console.log(
-      `You can connect to express app on http://localhost:${EXPRESS_PORT}`
-    );
-  });
 };
 createServer();

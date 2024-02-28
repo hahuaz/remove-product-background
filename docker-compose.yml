@@ -23,9 +23,7 @@ services:
     depends_on:
       - postgres
     ports:
-      # expose both http and ws ports
       - "3001:3001"
-      - "6666:6666"
 
     volumes:
       - ./:/app # sync files from host to container

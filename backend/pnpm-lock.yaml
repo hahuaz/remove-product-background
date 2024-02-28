@@ -41,6 +41,9 @@ dependencies:
   vite:
     specifier: ^5.0.8
     version: 5.1.4(@types/node@20.11.5)
+  vite-express:
+    specifier: ^0.15.0
+    version: 0.15.0
 
 devDependencies:
   '@types/express':
@@ -1718,6 +1721,12 @@ packages:
   /vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+    dev: false
+
+  /vite-express@0.15.0:
+    resolution: {integrity: sha512-g5CIiUrip9t3LVgO0v0G+rB7HbtQL6oouyRAGeahHt7lDdJYxiURBdAkOYlOexoCLs6PZQRzbIwaT9BNPjCz6g==}
+    dependencies:
+      picocolors: 1.0.0
     dev: false
 
   /vite@5.1.4(@types/node@20.11.5):
