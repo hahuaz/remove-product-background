@@ -21,10 +21,10 @@ const STATIC_PATH =
 const app = express();
 const EXPRESS_PORT = 3001;
 
-app.use(async (req, res, next) => {
-  console.log(req.method, req.url, req.headers, JSON.stringify(req.body || {}));
-  next();
-});
+// app.use(async (req, res, next) => {
+//   console.log(req.method, req.url, req.headers, JSON.stringify(req.body || {}));
+//   next();
+// });
 
 // Set up Shopify authentication and webhook handling
 app.get(shopify.config.auth.path, shopify.auth.begin());
@@ -33,30 +33,17 @@ app.get(
   shopify.auth.callback(),
   shopify.redirectToShopifyOrAppRoot()
 );
+// TODO make sure webhook requests are authenticated
 // app.post(
 //   shopify.config.webhooks.path,
 //   shopify.processWebhooks({ webhookHandlers: PrivacyWebhookHandlers })
 // );
-
-// protect all routes except /api/auth, /api/auth/callback and webhooks. This makes sure all requests are originating from Shopify admin panel
-app.use("/api/*", shopify.validateAuthenticatedSession());
-
-// TODO encoding added by me may cause issues
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-app.use(shopify.cspHeaders());
-app.use(serveStatic(STATIC_PATH, { index: false }));
-
 // TODO shopify.ensureInstalledOnShop() redirects unistalled shops to shopify app install page. it can be customized if check only made to our db and not shopify
 // [shopify-app/INFO] Running ensureInstalledOnShop
 // 2024-01-29 22:48:53 [shopify-app/INFO] Found a session, but it is not valid. Redirecting to auth | {shop: dev-hahuaz.myshopify.com}
 // 2024-01-29 22:48:53 [shopify-api/INFO] Beginning OAuth | {shop: dev-hahuaz.myshopify.com, isOnline: false, callbackPath: /api/auth/callback}
+// if root is accessed, meaning entry of the app is accessed, check if user is authorized before serving the app
 app.get("/", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
-  console.log(
-    "shopify.ensureInstalledOnShop() passed for get root, now let to serve frontend"
-  );
-  // TODO if it didn't pass and has correct params, redirect to oauth page. if it doesn't have correct params, ignore it
   // be aware, shopify won't allow you to redirect user to http protocol on admin panel, even for dev mode.
   // shopify calls your app with bunch of query params as following, you need to pass host to frontend since AppBridge needs it
   // {
@@ -72,6 +59,15 @@ app.get("/", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
   _next();
 });
 
+// protect all api routes except  /api/auth, /api/auth/callback and webhooks. This makes sure all requests are originating from Shopify admin panel
+app.use("/api/*", shopify.validateAuthenticatedSession());
+
+// parse urlencoded and json body
+app.use(express.urlencoded({ extended: true }), express.json());
+
+// TODO use your own middleware but first update the shopify api to v9
+app.use(shopify.cspHeaders());
+app.use(serveStatic(STATIC_PATH, { index: false }));
 // end shopify setup
 
 // TODO limit cors before prod
@@ -82,6 +78,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Success!" });
+});
 app.use("/api/products", productRouter);
 app.use("/api/remove-background", removeBackgroundRouter);
 
