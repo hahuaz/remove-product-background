@@ -7,17 +7,17 @@ import { ProductTable } from "@/components";
 
 export default function HomePage() {
   const { t } = useTranslation();
-  useEffect(() => {
-    async function getData() {
-      const response = await fetch("/api/test");
-      const data = await response.json();
-      console.log(data);
-    }
+  // useEffect(() => {
+  //   async function getData() {
+  //     const response = await fetch("/api/test");
+  //     const data = await response.json();
+  //     console.log(data);
+  //   }
 
-    getData();
+  //   getData();
 
-    return () => {};
-  }, []);
+  //   return () => {};
+  // }, []);
 
   return (
     <Page fullWidth>

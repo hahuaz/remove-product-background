@@ -5,7 +5,6 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import dotenv from "dotenv";
 dotenv.config();
-console.log("process.env", process.env.SHOPIFY_APP_ID);
 
 import shopify from "./shopify";
 // import PrivacyWebhookHandlers from "./privacy";
@@ -54,9 +53,21 @@ app.use(serveStatic(STATIC_PATH, { index: false }));
 // 2024-01-29 22:48:53 [shopify-app/INFO] Found a session, but it is not valid. Redirecting to auth | {shop: dev-hahuaz.myshopify.com}
 // 2024-01-29 22:48:53 [shopify-api/INFO] Beginning OAuth | {shop: dev-hahuaz.myshopify.com, isOnline: false, callbackPath: /api/auth/callback}
 app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
+  console.log("redirecting to frontend");
+  // be aware, shopify won't allow you to redirect user to http protocol on admin panel, even for dev mode.
+  // shopify calls your app with bunch of query params as following, you need to pass host to frontend since AppBridge needs it
+  // {
+  //    embedded: '1',
+  //    hmac: 'yours',
+  //    host: 'yours', // base64 encoded host
+  //    id_token: 'yours',
+  //    locale: 'en-US',
+  //    session: 'yours',
+  //    shop: 'dev-hahuaz.myshopify.com',
+  //    timestamp: '1709121895'
+  //  }
   return res.status(200).send({
-    message:
-      "Shopify app installed for store. Open other port until serving static content from backend.",
+    message: "Shopify app installed for store. You need to serve client now.",
   });
 });
 

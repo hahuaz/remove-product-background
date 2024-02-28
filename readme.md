@@ -44,7 +44,13 @@ For example, shopify-node-starter template uses `ensureInstalledOnShop` function
 
 
 # TODO:
-- shopify app setup > url needs to be set to http://localhost:3000. http://127.0.0.1:3000 will not work since shopify resolves it to its own url
+
+
 - Backend port should be exposed for shopify to call ouath callback.
 ./cloudflared.exe tunnel --url http://localhost:3001
 
+## Shopify App Setup
+- If you don't have reserved domain and use free plan, tunnel adresses will change on restart. So you always need to set URL of your app again on app setup as well as .env file.
+- Shopify won't allow you to work with http protocol. For example, if you set oauth callback url that uses http, it will ignore it and switch to https and your flow will fail.
+- You can't redirect the client to different URL. Doing so will throw error because AppBridge checks the URL of the app that resides in app setup against the redirected URL. So in your design system, work with only one entry point to the app.
+- 
