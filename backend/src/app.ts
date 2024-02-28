@@ -5,13 +5,13 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import dotenv from "dotenv";
 dotenv.config();
-
+import { createServer as createViteServer } from "vite";
 import shopify from "./shopify";
 // import PrivacyWebhookHandlers from "./privacy";
-
 // import redis from "./config/redis";
-
 import { productRouter, removeBackgroundRouter } from "./routes";
+
+const isDev = process.env.NODE_ENV === "production" ? false : true;
 
 const STATIC_PATH =
   process.env.NODE_ENV === "production"
@@ -52,8 +52,11 @@ app.use(serveStatic(STATIC_PATH, { index: false }));
 // [shopify-app/INFO] Running ensureInstalledOnShop
 // 2024-01-29 22:48:53 [shopify-app/INFO] Found a session, but it is not valid. Redirecting to auth | {shop: dev-hahuaz.myshopify.com}
 // 2024-01-29 22:48:53 [shopify-api/INFO] Beginning OAuth | {shop: dev-hahuaz.myshopify.com, isOnline: false, callbackPath: /api/auth/callback}
-app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
-  console.log("redirecting to frontend");
+app.get("/", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
+  console.log(
+    "shopify.ensureInstalledOnShop() passed for get root, now let to serve frontend"
+  );
+  // TODO if it didn't pass and has correct params, redirect to oauth page. if it doesn't have correct params, ignore it
   // be aware, shopify won't allow you to redirect user to http protocol on admin panel, even for dev mode.
   // shopify calls your app with bunch of query params as following, you need to pass host to frontend since AppBridge needs it
   // {
@@ -66,9 +69,7 @@ app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
   //    shop: 'dev-hahuaz.myshopify.com',
   //    timestamp: '1709121895'
   //  }
-  return res.status(200).send({
-    message: "Shopify app installed for store. You need to serve client now.",
-  });
+  _next();
 });
 
 // end shopify setup
@@ -81,18 +82,38 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", async (_req, res) => {
-  res.send("Hello World!");
-});
 app.use("/api/products", productRouter);
 app.use("/api/remove-background", removeBackgroundRouter);
 
 // connect to services and start the express app
-const startApp = async () => {
+const createServer = async () => {
   // await redis.connect();
 
   // const rabbitmqChannel = await getRabbitMQChannel();
   // await rabbitmqChannel.assertQueue("validate-name");
+
+  if (isDev) {
+    const vite = await createViteServer({
+      root: join(__dirname, "../../frontend"),
+      server: {
+        middlewareMode: true,
+        hmr: {
+          // without docker you only need following config. client will send ping request to  ws://localhost:6666/
+          // protocol: "ws",
+          // host: "localhost",
+          // port: 6666,
+          // clientPort: 6666,
+          protocol: "ws",
+          host: "0.0.0.0",
+          port: 6666,
+          clientPort: 6666,
+        },
+      },
+    });
+    app.use(vite.middlewares);
+  } else {
+    // TODO serve build files on production
+  }
 
   app.listen(EXPRESS_PORT, () => {
     console.log(
@@ -100,4 +121,4 @@ const startApp = async () => {
     );
   });
 };
-startApp();
+createServer();

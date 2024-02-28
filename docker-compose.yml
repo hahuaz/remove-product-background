@@ -1,5 +1,5 @@
 version: "3.8"
-name: shopify-app
+name: remove-product-background
 services:
   postgres:
     image: postgres:latest
@@ -12,34 +12,26 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  express:
+  app:
     stdin_open: true
     env_file:
-      - ./backend/.env
+      - /.env
     build:
-      context: ./backend
+      context: ./
       dockerfile: Dockerfile
-    container_name: backend
+    container_name: app
     depends_on:
       - postgres
     ports:
+      # expose both http and ws ports
       - "3001:3001"
+      - "6666:6666"
+
     volumes:
-      - ./backend:/backend # sync files between host and container. Enable hot reloading
-      - /backend/node_modules/ # do not share node_modules between host and container
-  vite:
-    env_file:
-      - ./frontend/.env
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend
-    ports:
-      - "3000:3000"
-      - "64999:64999"
-    volumes:
-      - ./frontend:/frontend # sync files between host and container. Enable hot reloading
-      - /frontend/node_modules/ # do not share node_modules between host and container
+      - ./:/app # sync files from host to container
+      # followings are needed to not share node_modules from host to container. You are specifying the directories that shouldn't be reloaded in the container
+      - /app/frontend/node_modules
+      - /app/backend/node_modules
 
 volumes:
   postgres-data:

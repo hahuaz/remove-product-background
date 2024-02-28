@@ -21,8 +21,9 @@ export default function HomePage() {
 
   return (
     <Page fullWidth>
-      <TitleBar title={t("homePage.title")} primaryAction={undefined} />
+      <TitleBar title={"ses"} primaryAction={undefined} />
       <Layout>
+        <p>hello 219223</p>
         {/* <Layout.Section>
           <ProductTable></ProductTable>
         </Layout.Section> */}
