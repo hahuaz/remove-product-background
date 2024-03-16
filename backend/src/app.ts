@@ -19,16 +19,8 @@ const app = express();
 //   next();
 // });
 
-// START OF SHOPIFY SETUP
-/**
- * about shopify oauth process:
- * 1. it doesn't save any info in session storage about oauth begin.
- * 2. it uses secure cookies to verify the nonce to prevent CSRF attacks. It has no alternative since it didn't save any info in session storage about oauth begin. it implements safe compare, etc. to increase security. So it's good idea to use shopify api for oauth process.
- * 3. At the end of oauth callback, it saves session in session storage with access token, shop name, etc.
- * 4. if the app is installed in store on shopify side but somehow you lost the session in your db, user won't go through oauth consent again. Shopify will handle oauth process under the hood and will call your oauth callback url so you can save the session in your db again.
- */
+// START OF SHOPIFY OAUTH SETUP
 app.get(shopify.config.auth.path, shopify.auth.begin());
-// shopify utilizes secure cookies to verify the
 app.get(
   shopify.config.auth.callbackPath,
   shopify.auth.callback(),
@@ -69,7 +61,7 @@ app.get(
 // protect all api routes except /api/auth, /api/auth/callback and webhooks. Webhooks have different validator on their own.
 // This makes sure all requests are originating from Shopify admin panel and will deny unauthorized requests.
 app.use("/api/*", shopify.validateAuthenticatedSession());
-// END OF SHOPIFY SETUP
+// END OF SHOPIFY OAUTH SETUP
 
 // if dev, add cors headers to be able to work with localhosted frontend
 if (IS_DEV) {
