@@ -7,9 +7,6 @@ import ViteExpress from "vite-express";
 import { addCorsHeaders } from "./middlewares";
 // import PrivacyWebhookHandlers from "./privacy";
 import { productRouter, removeBackgroundRouter } from "./routes";
-// TODO remove dotenv after emracing docker .env
-// import dotenv from "dotenv";
-// dotenv.config();
 import shopify from "./shopify";
 
 const IS_DEV = process.env.NODE_ENV === "production" ? false : true;
