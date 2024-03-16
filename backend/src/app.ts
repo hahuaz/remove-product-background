@@ -63,10 +63,10 @@ app.get(
 app.use("/api/*", shopify.validateAuthenticatedSession());
 // END OF SHOPIFY OAUTH SETUP
 
-// if dev, add cors headers to be able to work with localhosted frontend
-if (IS_DEV) {
-  app.use(addCorsHeaders());
-}
+// currently you don't need to add cors since both frontend and backend are served on the same port.
+// if (IS_DEV) {
+//   app.use(addCorsHeaders());
+// }
 
 // urlencoded will parse the body of the request if it's urlencoded. Urlencoded data is sent by forms and has the following format: key1=value1&key2=value2
 // json will parse the body of the request if it's json. Json data is sent by frontend and has the following format: {"key1": "value1", "key2": "value2"}
@@ -78,11 +78,11 @@ app.get("/api/test", (req, res) => {
 app.use("/api/products", productRouter);
 app.use("/api/remove-background", removeBackgroundRouter);
 
-// connect to services and start the express app
 const createServer = async () => {
   // connect redis, postgresql, etc.
 
   if (IS_DEV) {
+    // work with only one port instead of spinning up two servers just for development
     ViteExpress.config({
       viteConfigFile: join(__dirname, "../../frontend/vite.config.ts"),
       mode: "development",
