@@ -26,6 +26,7 @@ const billingConfig = {
 };
 
 const shopify = shopifyApp({
+  // https://github.com/Shopify/shopify-api-js/tree/main/packages/shopify-api
   api: {
     apiVersion: LATEST_API_VERSION,
     restResources,
@@ -49,6 +50,5 @@ const shopify = shopifyApp({
     process.env.DATABASE_URL
   ),
 });
-shopify.api.utils;
 
 export default shopify;
