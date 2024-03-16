@@ -15,7 +15,7 @@ services:
   app:
     stdin_open: true
     env_file:
-      - /.env
+      - ./.env
     build:
       context: ./
       dockerfile: Dockerfile
