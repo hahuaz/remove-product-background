@@ -32,6 +32,7 @@ export default defineConfig(({ command, mode }) => {
     define: {
       // expose env variables to the client
       "process.env.SHOPIFY_APP_ID": JSON.stringify(process.env.SHOPIFY_APP_ID),
+      "process.env.APP_URL": JSON.stringify(process.env.APP_URL),
     },
   };
 });

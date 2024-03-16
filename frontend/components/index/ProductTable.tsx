@@ -13,12 +13,12 @@ export const ProductTable = () => {
     // TODO use hook
     try {
       const response = await authenticatedFetch(app)(
-        `${process.env.API_URL}remove-bg/product`
+        `/api/remove-background/product`
       );
       const data = await response.json();
       setProducts(data.products);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

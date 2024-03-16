@@ -22,11 +22,11 @@ export default function HomePage() {
   return (
     <Page fullWidth>
       <TitleBar title={t("homePage.title")} primaryAction={undefined} />
-      <Layout>
-        {/* <Layout.Section>
+      {/* <Layout>
+        <Layout.Section>
           <ProductTable></ProductTable>
-        </Layout.Section> */}
-      </Layout>
+        </Layout.Section>
+      </Layout> */}
     </Page>
   );
 }

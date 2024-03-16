@@ -7,11 +7,9 @@ if (process.env.DATABASE_URL == undefined) {
   throw new Error("Missing DATABASE_URL");
 }
 
-const { SHOPIFY_APP_ID, SHOPIFY_APP_SECRET, HOST_NAME } = process.env;
-if (!SHOPIFY_APP_ID || !SHOPIFY_APP_SECRET || !HOST_NAME) {
-  throw new Error(
-    "Missing or invalid SHOPIFY_APP_ID, SHOPIFY_APP_SECRET, or HOST_NAME"
-  );
+const { SHOPIFY_APP_ID, SHOPIFY_APP_SECRET, APP_URL } = process.env;
+if (!SHOPIFY_APP_ID || !SHOPIFY_APP_SECRET || !APP_URL) {
+  throw new Error("Missing or invalid environment variables.");
 }
 
 // The transactions with Shopify will always be marked as test transactions, unless NODE_ENV is production.
@@ -34,7 +32,8 @@ const shopify = shopifyApp({
     apiKey: SHOPIFY_APP_ID,
     apiSecretKey: SHOPIFY_APP_SECRET,
     scopes: ["read_products", "write_products"],
-    hostName: HOST_NAME,
+    // hostName should be domain, url without protocol
+    hostName: new URL(APP_URL).hostname,
     isEmbeddedApp: true,
   },
   auth: {

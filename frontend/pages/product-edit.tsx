@@ -42,7 +42,7 @@ interface PreviewResponse {
   previewUrl: string;
 }
 
-export default function other() {
+export default function Other() {
   const [product, setProduct] = useState<Product | null>(null);
   const [isPreviewModalActive, setIsPreviewModalActive] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -52,7 +52,7 @@ export default function other() {
     b: 19,
     a: 1,
   });
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   // const [popoverActive, setPopoverActive] = useState(true);
 
   // const togglePopoverActive = () => {
@@ -65,9 +65,7 @@ export default function other() {
   const getData = async () => {
     try {
       const response = await authenticatedFetch(app)(
-        `${process.env.API_URL}remove-bg/product/${searchParams.get(
-          "productId"
-        )}`
+        `/api/remove-bg/product/${searchParams.get("productId")}`
       );
       const { product } = await response.json();
       console.log(product);
@@ -83,13 +81,10 @@ export default function other() {
 
   const removeBg = async (removePayload: RemovePayload) => {
     try {
-      const response = await authenticatedFetch(app)(
-        `${process.env.API_URL}remove-bg`,
-        {
-          method: "PUT",
-          body: JSON.stringify(removePayload),
-        }
-      );
+      const response = await authenticatedFetch(app)(`/api/remove-bg`, {
+        method: "PUT",
+        body: JSON.stringify(removePayload),
+      });
 
       console.log(response);
     } catch (error) {
@@ -102,13 +97,10 @@ export default function other() {
       setPreviewUrl(null);
       setIsPreviewModalActive(true);
       console.log(selectedColor);
-      const response = await authenticatedFetch(app)(
-        `${process.env.API_URL}remove-bg/preview`,
-        {
-          method: "POST",
-          body: JSON.stringify({ ...removePayload, selectedColor }),
-        }
-      );
+      const response = await authenticatedFetch(app)(`/api/remove-bg/preview`, {
+        method: "POST",
+        body: JSON.stringify({ ...removePayload, selectedColor }),
+      });
       if (response.status === 201) {
         const { previewUrl } = await response.json();
         setPreviewUrl(previewUrl);
