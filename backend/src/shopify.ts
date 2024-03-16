@@ -3,19 +3,6 @@ import { restResources } from "@shopify/shopify-api/rest/admin/2023-04";
 import { shopifyApp } from "@shopify/shopify-app-express";
 import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
 
-// TODO use shopify-api instead of shopify-app-express
-// import { shopifyApi } from "@shopify/shopify-api";
-// const shopify =  shopifyApi({
-//   apiVersion: LATEST_API_VERSION,
-//   restResources,
-//   billing: undefined, // or replace with billingConfig above to enable example billing
-//   apiKey: SHOPIFY_APP_ID,
-//   apiSecretKey: SHOPIFY_APP_SECRET,
-//   scopes: ["read_products", "write_products"],
-//   hostName: HOST_NAME,
-//   isEmbeddedApp: true,
-// });
-
 if (process.env.DATABASE_URL == undefined) {
   throw new Error("Missing DATABASE_URL");
 }
@@ -40,7 +27,6 @@ const billingConfig = {
 
 const shopify = shopifyApp({
   api: {
-    // WARNING: [shopify-api/WARNING] Loading REST resources for API version 2023-04, which doesn't match the default 2023-07
     apiVersion: LATEST_API_VERSION,
     restResources,
     billing: undefined, // or replace with billingConfig above to enable example billing

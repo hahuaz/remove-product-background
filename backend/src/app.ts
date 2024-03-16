@@ -12,11 +12,10 @@ import { productRouter, removeBackgroundRouter } from "./routes";
 // dotenv.config();
 import shopify from "./shopify";
 
-const isDevEnvironment = process.env.NODE_ENV === "production" ? false : true;
-
-const app = express();
+const IS_DEV = process.env.NODE_ENV === "production" ? false : true;
 const EXPRESS_PORT = 3001;
 
+const app = express();
 // app.use(async (req, res, next) => {
 // TODO log every request
 //   next();
@@ -60,16 +59,16 @@ app.get(
   }
 );
 
-if (isDevEnvironment) {
+if (IS_DEV) {
   app.use(addCorsHeaders());
 }
 
 // protect all api routes except  /api/auth, /api/auth/callback and webhooks. This makes sure all requests are originating from Shopify admin panel
 app.use("/api/*", shopify.validateAuthenticatedSession());
+// end shopify setup
 
 // parse urlencoded and json body
 app.use(express.urlencoded({ extended: true }), express.json());
-// end shopify setup
 
 app.get("/api/test", (req, res) => {
   res.json({ message: "Success!" });
@@ -81,7 +80,7 @@ app.use("/api/remove-background", removeBackgroundRouter);
 const createServer = async () => {
   // await redis.connect();
 
-  if (isDevEnvironment) {
+  if (IS_DEV) {
     ViteExpress.config({
       viteConfigFile: join(__dirname, "../../frontend/vite.config.ts"),
       mode: "development",
