@@ -18,42 +18,42 @@ The --force-recreate is important flag to use when you want to recreate containe
 ## How to sync the schema changes that are made by PostgreSQLSessionStorage into the migration files
 
 
-First of all, you need to create migration files in your host machine (not in docker container) to persist them. So make sure you are in host machine terminal.
+First of all, you need to create migration files in your host machine (not in docker container) to persist them. So make sure you are in host terminal.
 
-### 1. Reset the db
+### 1. Reset the database
+Below command will delete all the tables and data in the database. So, we can start from scratch. 
+
 ```bash
 cd backend
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres?schema=public" npx prisma migrate reset
 ```
 
-This will delete all the tables and data in the db. So, we can start from scratch. 
 
-Be aware that localhost is used instead of db container name (postgres) since we are in host machine terminal. Providing the DATABASE_URL in the command line is important. Otherwise, prisma will use the DATABASE_URL in .env file which is for docker container automatically and you will end up with errors.
+Be aware that `localhost` is used instead of database container name (postgres) since we are in host terminal. Providing the DATABASE_URL in the command line is important. Otherwise, prisma would automatically use the DATABASE_URL in .env file which is for docker container  and you will end up with errors.
 
-### 2. Start the app and pull the schema changes that are made by PostgreSQLSessionStorage into the schema.prisma file
+### 2. Start the app and create models from the drift
 
 ```bash
 cd ..
 docker-compose up --force-recreate
 ```
 
-When app is started PostgreSQLSessionStorage will create the necessary table for sessions. After that, you can pull the schema changes that are made by PostgreSQLSessionStorage into the migration files.
+When app is started PostgreSQLSessionStorage will create the necessary table for sessions. After that, you can use below command to pull the schema changes that are made by PostgreSQLSessionStorage into the schema.prisma file and create models for them.
 
 ```bash
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres?schema=public" npx prisma db pull
 ```
 
-This will pull the schema changes that are made by PostgreSQLSessionStorage into the schema.prisma file and create models for them.
-
 ### 3. Create migration files with the name of introspected_change
+
+Below comand will create migration files in prisma/migrations folder.
 
 ```bash	
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres?schema=public" npx prisma migrate dev --name introspected_change
 ```
 
-This will create migration files in prism/migrations folder.
-
 ### 4. Remove the container and app image and restart the docker-compose
+
 
 ```bash
 docker-compose down
