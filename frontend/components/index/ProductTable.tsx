@@ -12,9 +12,7 @@ export const ProductTable = () => {
   const getData = async () => {
     // TODO use hook
     try {
-      const response = await authenticatedFetch(app)(
-        `/api/remove-background/product`
-      );
+      const response = await authenticatedFetch(app)(`/api/products`);
       const data = await response.json();
       setProducts(data.products);
     } catch (error) {
