@@ -81,7 +81,7 @@ export default function Other() {
 
   const removeBg = async (removePayload: RemovePayload) => {
     try {
-      const response = await authenticatedFetch(app)(`/api/remove-bg`, {
+      const response = await authenticatedFetch(app)(`/api/remove-background`, {
         method: "PUT",
         body: JSON.stringify(removePayload),
       });
@@ -97,10 +97,13 @@ export default function Other() {
       setPreviewUrl(null);
       setIsPreviewModalActive(true);
       console.log(selectedColor);
-      const response = await authenticatedFetch(app)(`/api/remove-bg/preview`, {
-        method: "POST",
-        body: JSON.stringify({ ...removePayload, selectedColor }),
-      });
+      const response = await authenticatedFetch(app)(
+        `/api/remove-background/preview`,
+        {
+          method: "POST",
+          body: JSON.stringify({ ...removePayload, selectedColor }),
+        }
+      );
       if (response.status === 201) {
         const { previewUrl } = await response.json();
         setPreviewUrl(previewUrl);
