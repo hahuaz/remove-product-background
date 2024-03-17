@@ -14,7 +14,9 @@ export const ProductTable = () => {
     try {
       const response = await authenticatedFetch(app)(`/api/products`);
       const data = await response.json();
-      setProducts(data.products);
+      if (response.ok) {
+        setProducts(data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -63,7 +65,9 @@ export const ProductTable = () => {
                     >
                       <img
                         className="object-contain w-10 h-10"
-                        src={images[0].src}
+                        width={80}
+                        height={80}
+                        src={images[0]?.src}
                         alt="product image"
                       />
                     </div>

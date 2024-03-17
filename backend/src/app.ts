@@ -6,7 +6,7 @@ import ViteExpress from "vite-express";
 
 import { addCorsHeaders } from "./middlewares";
 // import PrivacyWebhookHandlers from "./privacy";
-import { productRouter, removeBackgroundRouter } from "./routes";
+import { productsRouter, removeBackgroundRouter } from "./routes";
 import shopify from "./shopify";
 
 const IS_DEV = process.env.NODE_ENV === "production" ? false : true;
@@ -75,7 +75,7 @@ app.use(express.urlencoded({ extended: true }), express.json());
 app.get("/api/test", (req, res) => {
   res.json({ message: "Success!" });
 });
-app.use("/api/products", productRouter);
+app.use("/api/products", productsRouter);
 app.use("/api/remove-background", removeBackgroundRouter);
 
 const createServer = async () => {

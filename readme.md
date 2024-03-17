@@ -53,6 +53,13 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres?schema=publ
 
 This will create migration files in prism/migrations folder.
 
+### 4. Remove the container and app image and restart the docker-compose
+
+```bash
+docker-compose down
+docker rmi remove-product-background-app
+docker-compose up --force-recreate
+```
 
 ## Shopify Oauth Flow
 1. Shopify will redirect user to app root url without any additional path. It will provide necessary query params such as hmac, host, shop, timestamp for you to validate the request.

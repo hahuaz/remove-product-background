@@ -8,25 +8,25 @@ import { ProductTable } from "@/components";
 
 export default function HomePage() {
   const { t } = useTranslation();
-  const authenticatedFetch = useAuthenticatedFetch();
-  useEffect(() => {
-    async function getData() {
-      const response = await authenticatedFetch("/api/test", {});
-      const data = await response.json();
-      console.log(data);
-    }
-    getData();
-    return () => {};
-  }, []);
+  // const authenticatedFetch = useAuthenticatedFetch();
+  // useEffect(() => {
+  //   async function getData() {
+  //     const response = await authenticatedFetch("/api/test", {});
+  //     const data = await response.json();
+  //     console.log(data);
+  //   }
+  //   getData();
+  //   return () => {};
+  // }, []);
 
   return (
     <Page fullWidth>
       <TitleBar title={t("homePage.title")} primaryAction={undefined} />
-      {/* <Layout>
+      <Layout>
         <Layout.Section>
           <ProductTable></ProductTable>
         </Layout.Section>
-      </Layout> */}
+      </Layout>
     </Page>
   );
 }

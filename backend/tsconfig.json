@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true // Do not generate output files (to disable output file generation)
+    "noEmit": true, // Do not generate output files (to disable output file generation)
+    "noImplicitAny": false
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
