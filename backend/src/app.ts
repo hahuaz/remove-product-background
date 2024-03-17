@@ -83,7 +83,9 @@ const createServer = async () => {
 
   if (IS_DEV) {
     // work with only one port instead of spinning up two servers just for development
+    // reason why viteexpress used instead of creating proxy in vite is that we want to emulate production environment as much as possible. By this approach, we check if user is authorized before serving the app. If vite would serve the app, it would be served before the user is authorized.
     ViteExpress.config({
+      // TODO tailwind.config.js should be in the root of the project. in this case, it should be in the root of the backend folder. it seems to can't be configured via api for now.
       viteConfigFile: join(__dirname, "../../frontend/vite.config.ts"),
       mode: "development",
     });
