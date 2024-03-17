@@ -65,7 +65,7 @@ export default function Other() {
   const getData = async () => {
     try {
       const response = await authenticatedFetch(app)(
-        `/api/remove-bg/product/${searchParams.get("productId")}`
+        `/api/products/${searchParams.get("productId")}`
       );
       const { product } = await response.json();
       console.log(product);

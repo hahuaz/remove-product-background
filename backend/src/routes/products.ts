@@ -32,4 +32,20 @@ router.get("/", async (req, res) => {
   res.json(data.products);
 });
 
+router.get("/:id", async (req, res) => {
+  const { shop, accessToken } = res.locals.shopify
+    .session as Prisma.$shopify_sessionsPayload["scalars"];
+
+  const { data } = await axios.get(
+    `https://${shop}/admin/api/2023-04/products/${req.params.id}.json`,
+    {
+      headers: {
+        "X-Shopify-Access-Token": accessToken,
+      },
+    }
+  );
+
+  res.json(data);
+});
+
 export default router;
