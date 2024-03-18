@@ -12,24 +12,35 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  app:
+  backend:
     stdin_open: true
     env_file:
       - ./.env
     build:
-      context: ./
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: app
+    container_name: backend
     depends_on:
       - postgres
     ports:
       - "3001:3001"
-
     volumes:
-      - ./:/app # sync files from host to container
-      # followings are needed to not share node_modules from host to container. You are specifying the directories that shouldn't be reloaded in the container
-      - /app/frontend/node_modules
-      - /app/backend/node_modules
+      - ./backend:/backend # sync files between host and container to enable hot-reloading
+      - /backend/node_modules/ # do not share node_modules from host to container. Basically, you are specifying the directories that shouldn't be reloaded in the container
+  # frontend only needed for development
+  frontend:
+    env_file:
+      - ./.env
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+      - "64999:64999"
+    volumes:
+      - ./frontend:/frontend # sync files between host and container to enable hot-reloading
+      - /frontend/node_modules/ # do not share node_modules from host to container. Basically, you are specifying the directories that shouldn't be reloaded in the container
 
 volumes:
   postgres-data:

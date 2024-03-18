@@ -2,7 +2,6 @@ import express from "express";
 import { readFileSync } from "fs";
 import { join } from "path";
 import serveStatic from "serve-static";
-import ViteExpress from "vite-express";
 
 import { addCorsHeaders } from "./middlewares";
 // import PrivacyWebhookHandlers from "./privacy";
@@ -82,18 +81,17 @@ const createServer = async () => {
   // connect redis, postgresql, etc.
 
   if (IS_DEV) {
-    // work with only one port instead of spinning up two servers just for development
-    // reason why viteexpress used instead of creating proxy in vite is that we want to emulate production environment as much as possible. By this approach, we check if user is authorized before serving the app. If vite would serve the app, it would be served before the user is authorized.
-    ViteExpress.config({
-      // TODO tailwind.config.js should be in the root of the project. in this case, it should be in the root of the backend folder. it seems to can't be configured via api for now.
-      viteConfigFile: join(__dirname, "../../frontend/vite.config.ts"),
-      mode: "development",
-    });
-    ViteExpress.listen(app, EXPRESS_PORT, () =>
+    app.listen(EXPRESS_PORT, () =>
       console.log(
         `You can connect to express app on http://localhost:${EXPRESS_PORT}`
       )
     );
+    app.get("*", (req, res) => {
+      res.status(400).json({
+        message:
+          "Static files are not served in dev mode. Change your app setup to hit vite server.",
+      });
+    });
   } else {
     // TODO serve build files on production
     //   const STATIC_PATH =
