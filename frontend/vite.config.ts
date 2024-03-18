@@ -34,5 +34,21 @@ export default defineConfig(({ command, mode }) => {
       "process.env.SHOPIFY_APP_ID": JSON.stringify(process.env.SHOPIFY_APP_ID),
       "process.env.APP_URL": JSON.stringify(process.env.APP_URL),
     },
+    server: {
+      host: "0.0.0.0", // listen on all IPs to allow host to access the container
+      port: 3000,
+      hmr: {
+        protocol: "ws",
+        port: 64999,
+      },
+      proxy: {
+        // "^/(\\?.*)?$": proxyOptions,
+        "^/api": {
+          target: `http://backend:3001`, // connect to the backend container
+          changeOrigin: true,
+          secure: false,
+        },
+      },
+    },
   };
 });

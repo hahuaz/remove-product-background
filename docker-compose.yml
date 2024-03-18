@@ -26,7 +26,7 @@ services:
       - "3001:3001"
     volumes:
       - ./backend:/backend # sync files between host and container to enable hot-reloading
-      - /backend/node_modules/ # do not share node_modules from host to container. Basically, you are specifying the directories that shouldn't be reloaded in the container
+      - /backend/node_modules # do not share node_modules from host to container. Basically, you are specifying the directories that shouldn't be reloaded in the container
   # frontend only needed for development
   frontend:
     env_file:
@@ -40,7 +40,7 @@ services:
       - "64999:64999"
     volumes:
       - ./frontend:/frontend # sync files between host and container to enable hot-reloading
-      - /frontend/node_modules/ # do not share node_modules from host to container. Basically, you are specifying the directories that shouldn't be reloaded in the container
+      - /frontend/node_modules # do not share node_modules from host to container. Basically, you are specifying the directories that shouldn't be reloaded in the container
 
 volumes:
   postgres-data:
