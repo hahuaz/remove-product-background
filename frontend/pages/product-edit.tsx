@@ -96,11 +96,13 @@ export default function Other() {
     try {
       setPreviewUrl(null);
       setIsPreviewModalActive(true);
-      console.log(selectedColor);
       const response = await authenticatedFetch(app)(
         `/api/remove-background/preview`,
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ ...removePayload, selectedColor }),
         }
       );

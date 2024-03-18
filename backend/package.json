@@ -31,6 +31,7 @@
     "@shopify/shopify-api": "^9.4.1",
     "@shopify/shopify-app-express": "^4.1.2",
     "@shopify/shopify-app-session-storage-postgresql": "^3.0.1",
+    "aws-sdk": "^2.1579.0",
     "axios": "^1.6.8",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",

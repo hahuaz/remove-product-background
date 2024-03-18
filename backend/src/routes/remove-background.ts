@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+import awsSdk from "aws-sdk";
 import axios from "axios";
 import express from "express";
 import sharp from "sharp";
@@ -5,18 +7,50 @@ import sharp from "sharp";
 // import prisma from "../config/prisma";
 // import redis from "../config/redis";
 
-const AZURE_VISION_KEY = process.env.AZURE_VISION_KEY;
-if (!AZURE_VISION_KEY) {
-  throw new Error("AZURE_VISION_KEY is not set.");
+const {
+  AZURE_VISION_KEY,
+  AWS_APP_USER_ID,
+  AWS_APP_USER_SECRET,
+  PROCESSED_IMAGES_BUCKET,
+  AWS_REGION,
+} = process.env;
+if (
+  !AZURE_VISION_KEY ||
+  !AWS_APP_USER_ID ||
+  !AWS_APP_USER_SECRET ||
+  !AWS_REGION ||
+  !PROCESSED_IMAGES_BUCKET
+) {
+  throw new Error("Missing environment variables");
 }
+
+awsSdk.config.update({
+  region: AWS_REGION,
+  credentials: {
+    accessKeyId: AWS_APP_USER_ID,
+    secretAccessKey: AWS_APP_USER_SECRET,
+  },
+});
+
+const s3 = new awsSdk.S3();
 
 const router = express.Router();
 
-router.get("/preview", async (req, res) => {
+router.post("/preview", async (req, res) => {
+  const { shop } = res.locals.shopify
+    .session as Prisma.$shopify_sessionsPayload["scalars"];
   const { imageSrc, productId, imageId, selectedColor } = req.body;
-  const { data: originalImage } = await axios.get(imageSrc, {
-    responseType: "arraybuffer",
-  });
+
+  let originalImage;
+  try {
+    const { data } = await axios.get(imageSrc, {
+      responseType: "arraybuffer",
+    });
+    originalImage = data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch image from the URL");
+  }
 
   // 1. store the original image
 
@@ -82,19 +116,26 @@ router.get("/preview", async (req, res) => {
     .toBuffer();
 
   // 7. save composedImage to S3
-  // await s3
-  // .putObject({
-  //   Bucket: PROCESSED_IMAGES_BUCKET,
-  //   Key: `${shopifyDomain}/${productId}-${imageId}.png`,
-  //   Body: composedImage,
-  // } as AWS.S3.PutObjectRequest)
-  // .promise();
+  console.log("started s3 upload");
+  try {
+    await s3
+      .putObject({
+        Bucket: PROCESSED_IMAGES_BUCKET,
+        Key: `${shop}/${productId}-${imageId}.webp`,
+        Body: composedImage,
+      } as AWS.S3.PutObjectRequest)
+      .promise();
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to upload composedImage to S3");
+  }
 
   // Construct the URL for the object
-  //  const previewUrl = `https://${PROCESSED_IMAGES_BUCKET}.s3.amazonaws.com/${shopifyDomain}/${productId}-${imageId}.png`;
+  const previewUrl = `https://${PROCESSED_IMAGES_BUCKET}.s3.amazonaws.com/${shop}/${productId}-${imageId}.webp`;
+  console.log("finished s3 upload");
 
   // 8. send the composedImage URL to the frontend
-  // res.json({ previewUrl });
+  return res.status(201).json({ previewUrl });
 });
 
 export default router;
